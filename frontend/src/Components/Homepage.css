@@ -1,0 +1,25 @@
+body {
+    text-align: center;
+}
+
+header {
+    color: white;
+    font-size: 75px;
+    font-weight: 700;
+    padding-bottom: 10px;
+    background-image: linear-gradient(rgb(13, 88, 47), rgb(29, 17, 17));
+}
+
+#content {
+    padding-top: 5px;
+    background-image: url(StockSnap_F5RFEDKXGH.jpg);
+    opacity: 75%;
+    padding-bottom: 100px;
+}
+
+#sidenote {
+    text-align: center;
+    font-size: 25px;
+    color:white;
+}
+
