@@ -8,8 +8,8 @@ class Homepage extends Component {
     }
 
     callAPI() {
-        fetch("http://localhost:9000/testAPI")
-        .then(res => res.text())
+        fetch("http://127.0.0.1:8000/sentiment/")
+        .then(res => res.json())
         .then(res => this.setState({ apiResponse: res}))
         .catch(err => err);
     }
