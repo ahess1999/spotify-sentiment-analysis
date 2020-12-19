@@ -1,6 +1,8 @@
 from django.urls import path
-from . import views
+from .views import current_user, UserList, PlaylistCreate
 
 urlpatterns = [
-    path('api/playlist/',views.PlaylistCreate.as_view())
+    path('current-user/', current_user),
+    path('users/', UserList.as_view()),
+    path('api/playlist/', PlaylistCreate.as_view())
 ]
