@@ -7,8 +7,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Playlist, User
+from .api.spotify_api import SpotifyAPI
 
-
+token = ""
 @api_view(['GET'])
 def current_user(request):
     serializer = UserSerializer(request.user)
@@ -24,7 +25,20 @@ class UserList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class PlaylistCreate(generics.ListCreateAPIView):
+class PlaylistCreate(APIView):
     permission_classes = (permissions.AllowAny,)
-    queryset = Playlist.objects.all()
-    serializer_class = PlaylistSerializer
+
+    def post(self, request, format=None):
+        serializer = PlaylistSerializer(data=token)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class TokenGet(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        token = request.data
+        test1 = SpotifyAPI()
+        return Response(test1.test(), status=status.HTTP_200_OK)

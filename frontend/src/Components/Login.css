@@ -1,13 +1,10 @@
 .login {
     display: grid;
     background-color: black;
-    height: 100vh;
+    padding: 100px;
     place-items: center;
   }
-  
-  .login > img {
-    height: 200px;
-  }
+
   
   .login > a {
     color: white;
@@ -16,4 +13,29 @@
     border-radius: 99px;
     font-weight: 800;
     background-color: #1db954;
+    
   }
+
+#pagetitle {
+  color: white;
+  font-weight: 800;
+  font-size: 100px;
+  padding-bottom: 25px;
+}
+
+#section2 {
+  display: grid;
+  grid-template-columns: 650px 1fr;
+  font-weight: 800;
+}
+
+
+#playlistlist {
+  font-weight: 600;
+  background-color: gray;
+  grid-column: 1;
+}
+
+#about {
+  text-align: center;
+}

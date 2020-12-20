@@ -1,32 +1,94 @@
-import React, { Component } from 'react'
-import './Homepage.css'
-import {Link} from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { getTokenFromResponse } from "./SpotifyAuth";
+import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import axios from 'axios'
+import "./Login.css";
+import Login from "./Login";
 
-class Homepage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
+const useStyles = makeStyles((theme) => ({
+    sidepanel: {
+        width: '100%',
+        maxWidth: 650,
+        backgroundColor: theme.palette.background.gray,
+        position: 'relative',
+        overflow: 'auto',
+        maxHeight: 500,
+      },
+      listSection: {
+        backgroundColor: 'inherit',
+      },
+      ul: {
+        backgroundColor: 'inherit',
+        padding: 0,
+      },
+}));
+
+function Homepage() {
+    const [ token , setToken ] = useState(null);
+
+    const classes = useStyles();
+  
+    useEffect(() => {
+      // Set token
+      const hash = getTokenFromResponse();
+      window.location.hash = "";
+      let token = hash.access_token;
+  
+      if (token) {
+        setToken(token);
       }
 
+      const fetchData = async () => {
+        const result = await axios.post('/api/token/', token)
+        .then(res => console.log(res));
+      }
+        if(token) {
+          fetchData();
+        }
+      console.log({token})
+    },[]);
 
-    render() {
-        return (
-            <div>
-                <header>
-                    Playlist Sentiment Analysis
-                    <Link to='/signin'>Sign In</Link>
-                </header>
-                <div id='content'>
-                    <p id='sidenote'>Create your own playlists through sentiment analysis</p>
+
+    return(
+        <div className="app">
+        {
+            token ? (
+                <div>
+                    <h1>WAWAWEEA -- GREAT SUCCESS!!!</h1>
+                    <h2>{token}</h2>
                 </div>
-                <footer>
-                    How it works
-                </footer>
-            </div>
-        );
-    }
-}
+            ):
+            (<div>
+                <Login/>
+                <div id='section2'>
+                        <div id='playlistlist'>BROWSE SOME PLAYLISTS:
+                        <List className={classes.sidepanel}>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                            <ListItem button>Test</ListItem>
+                        </List>
+                    </div>
+                <div id='about'>HOW IT WORKS</div>
+              </div>
+            </div>)
+          }
+      </div>
+    );
 
+}
 
 export default Homepage;

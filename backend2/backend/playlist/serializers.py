@@ -33,6 +33,8 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         fields = ('token', 'username', 'password')
 
 class PlaylistSerializer(serializers.ModelSerializer):
+    user_token = serializers.SerializerMethodField()
+
     class Meta:
         model = Playlist
-        fields = ('id', 'playlistname', 'songlist')
+        fields = ('user_token','playlistname', 'songlist')
