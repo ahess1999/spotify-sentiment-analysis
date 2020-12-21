@@ -1,9 +1,9 @@
 import json
 import requests
 from datetime import date
-from .refresh import Refresh
+#from .refresh import Refresh
 
-spotify_user_id = "gp8n7os6rj2i6iv4bscbu9n58"
+spotify_user_id = "BQByDtyesi4VnqtrKz92elEGCCSqGFMolbym5-np7oHI7yewr_GQawZnd4dhw-tzO-MtVbx4EpBeb1zhMpcHbkkElNt6GmtAfLRLxsLcuyQeupTxtn517pm8MErjns7T_bL4MwgjbnjJrvgoDD1dYlMntFLfqCylA87n"
 class SpotifyAPI:
     def test(self):
         return "test"
@@ -362,7 +362,7 @@ class SpotifyAPI:
         print("Insider create playlist")
         print(response)
         response_json = response.json()
-
+        #return response
         return response_json["id"]
 
     def add_to_playlist(self):
@@ -503,5 +503,6 @@ class SpotifyAPI:
 
 print("Start....")
 a = SpotifyAPI()
-a.call_refresh()
-a.main()
+a.create_playlist()
+#a.call_refresh()
+#a.main()

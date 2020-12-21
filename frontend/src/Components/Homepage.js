@@ -34,13 +34,6 @@ function Homepage(props) {
     const [ token , setToken ] = useState(null);
 
     const classes = useStyles();
-  
-    function handle_submit() {
-      axios.get('/api/playlist/create/')
-      .then((res) => {
-        console.log(res.data)
-      })
-  }
 
     useEffect(() => {
       // Set token
@@ -65,6 +58,11 @@ function Homepage(props) {
 
     },[]);
 
+    function create_playlist(token) {
+      axios.post('/api/playlist/create/', token)
+      .then(res => console.log(res))
+    }
+
     return(
         <div className="app">
         {
@@ -72,7 +70,7 @@ function Homepage(props) {
                 <div>
                     <h1>WAWAWEEA -- GREAT SUCCESS!!!</h1>
                     <h2>{token}</h2>
-                    <button>Test</button>
+                    <button onClick={() => create_playlist(token)}>Test</button>
                 </div>
             ):
             (<div>

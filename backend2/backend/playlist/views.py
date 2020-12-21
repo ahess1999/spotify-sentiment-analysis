@@ -32,8 +32,11 @@ class PlaylistCreate(APIView):
         return Response(token)
 
     def post(self, request, format=None):
-        serializer = PlaylistSerializer(data=token)
+        serializer = PlaylistSerializer(data=request.data)
+        print(serializer)
         if serializer.is_valid():
+            test1 = SpotifyAPI()
+            test1.create_playlist()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -43,5 +46,4 @@ class TokenGet(APIView):
 
     def post(self, request, format=None):
         token = request.data
-        test1 = SpotifyAPI()
-        return Response(test1.test(), status=status.HTTP_200_OK)
+        return Response(token, status=status.HTTP_200_OK)
