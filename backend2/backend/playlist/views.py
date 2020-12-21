@@ -28,6 +28,9 @@ class UserList(APIView):
 class PlaylistCreate(APIView):
     permission_classes = (permissions.AllowAny,)
 
+    def get(self, request, format=None):
+        return Response(token)
+
     def post(self, request, format=None):
         serializer = PlaylistSerializer(data=token)
         if serializer.is_valid():

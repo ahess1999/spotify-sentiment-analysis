@@ -1,0 +1,3 @@
+const UPDATETOKEN = 'UPDATETOKEN'
+
+export default UPDATETOKEN;

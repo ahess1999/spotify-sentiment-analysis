@@ -6,6 +6,9 @@ import ListItem from '@material-ui/core/ListItem';
 import axios from 'axios'
 import "./Login.css";
 import Login from "./Login";
+import { connect } from "react-redux"
+import { updateToken, } from "../redux/Token/token.actions";
+
 
 const useStyles = makeStyles((theme) => ({
     sidepanel: {
@@ -25,11 +28,20 @@ const useStyles = makeStyles((theme) => ({
       },
 }));
 
-function Homepage() {
+
+
+function Homepage(props) {
     const [ token , setToken ] = useState(null);
 
     const classes = useStyles();
   
+    function handle_submit() {
+      axios.get('/api/playlist/create/')
+      .then((res) => {
+        console.log(res.data)
+      })
+  }
+
     useEffect(() => {
       // Set token
       const hash = getTokenFromResponse();
@@ -42,14 +54,16 @@ function Homepage() {
 
       const fetchData = async () => {
         const result = await axios.post('/api/token/', token)
-        .then(res => console.log(res));
+        .then(res => console.log(res))
       }
         if(token) {
           fetchData();
+          props.updateToken(token)
         }
       console.log({token})
-    },[]);
 
+
+    },[]);
 
     return(
         <div className="app">
@@ -58,6 +72,7 @@ function Homepage() {
                 <div>
                     <h1>WAWAWEEA -- GREAT SUCCESS!!!</h1>
                     <h2>{token}</h2>
+                    <button>Test</button>
                 </div>
             ):
             (<div>
@@ -91,4 +106,17 @@ function Homepage() {
 
 }
 
-export default Homepage;
+    const mapStateToProps = state => {
+      return {
+        token: state.token.token,
+      }
+    }
+    
+    const mapDispatchToProps = dispatch => {
+      return {
+        updateToken: (token) => dispatch(updateToken(token)),
+      }
+    }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Homepage);
