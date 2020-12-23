@@ -1,20 +1,36 @@
 import json
 import requests
+#from secrets import spotify_user_id#, spotify_token
 from datetime import date
-#from .refresh import Refresh
+#from refresh import Refresh
 
-spotify_user_id = "BQByDtyesi4VnqtrKz92elEGCCSqGFMolbym5-np7oHI7yewr_GQawZnd4dhw-tzO-MtVbx4EpBeb1zhMpcHbkkElNt6GmtAfLRLxsLcuyQeupTxtn517pm8MErjns7T_bL4MwgjbnjJrvgoDD1dYlMntFLfqCylA87n"
 class SpotifyAPI:
     def test(self):
-        return "test"
+        return "tests"
     def __init__(self):
-        self.user_id = spotify_user_id
-        self.spotify_token = ""
+        self.user_id = "jimathonathin"
+        self.spotify_token = "BQBtvKPOJ3OgxCH_GYLPqcjJabz0VKOrsq0ngNJBintASjKfvcXy1i8nH0bRTfUQVAS59R_vMwL2XFsAaNSgTX1J7plwm06OBjzMra1z4O4EZt8F65TPATYgfIefGWaTjps5xA-NurX21rzcziTzvtDZs_HmuBd1xJtzoJhV3IgPGOP_P1j_T6IALMtHouuwkA"
         #self.playlist = "4hPMl9uWy6q7ZU4cqS6dcm"
         self.tracks = ""
         self.new_playlist_id = ""
         #self.artist_uri = "" #2h93pZq0e7k5yf4dywlkpM
         self.artist_name = ""
+        self.user_id = ""
+
+    def get_user_id(self):
+
+        query = "https://api.spotify.com/v1/me"
+
+        response = requests.get(query,
+                                headers={"Content-Type": "application/json",
+                                         "Authorization": "Bearer {}".format(self.spotify_token)})
+
+        response_json = response.json()
+
+        self.user_id = response_json['id']
+
+        return response_json['id']
+        
 
     def get_artist_json(self, artist_uri):
 
@@ -321,34 +337,39 @@ class SpotifyAPI:
 
     def get_tracks_in_playlist_from_uri(self, playlist_uri):
 
-        print("Finding songs in discover weekly...")
+        tracks = ""
 
         query = "https://api.spotify.com/v1/playlists/{}/tracks".format(
             playlist_uri)
 
+        print(query)
         response = requests.get(query,
                                 headers={"Content-Type": "application/json",
                                          "Authorization": "Bearer {}".format(self.spotify_token)})
 
         response_json = response.json()
 
-        return response_json
+        print(response)
 
-        # for i in response_json["items"]:
-        #     self.tracks += (i["track"]["uri"] + ",")
-        # self.tracks = self.tracks[:-1]
+        for i in response_json["items"]:
+            tracks += (i["track"]["uri"] + ",")
+        tracks = tracks[:-1]
 
+        return tracks
         # self.add_to_playlist()
 
     def create_playlist(self):
         # Create a new playlist
+        user_id = self.get_user_id()
         print("Trying to create playlist...")
         today = date.today()
 
         todayFormatted = today.strftime("%d/%m/%Y")
 
         query = "https://api.spotify.com/v1/users/{}/playlists".format(
-            spotify_user_id)
+            user_id)
+
+        print(query)
 
         request_body = json.dumps({
             "name": todayFormatted + " fire playlist", "description": "Sick playlist", "public": True
@@ -362,24 +383,31 @@ class SpotifyAPI:
         print("Insider create playlist")
         print(response)
         response_json = response.json()
-        #return response
-        return response_json["id"]
+        return response_json['id']
 
     def add_to_playlist(self):
         # add all songs to new playlist
         print("Adding songs...")
 
+        
         self.new_playlist_id = self.create_playlist()
+        tracks = self.get_tracks_in_playlist_from_uri('7afYAS7ly60P8b1GMSfTv2')
+
+        json = self.get_playlist_json('7afYAS7ly60P8b1GMSfTv2')
+
+        track_list = self.get_playlist_tracks_from_playlist_json(json)
 
         query = "https://api.spotify.com/v1/playlists/{}/tracks?uris={}".format(
-            self.new_playlist_id, self.tracks)
+            self.new_playlist_id, tracks)
 
+        print(query)
         response = requests.post(query, headers={"Content-Type": "application/json",
                                                  "Authorization": "Bearer {}".format(self.spotify_token)})
 
         print("Inside add to playlist")
         print(response)
         print(response.json)
+        return track_list
 
     def basic_sentiment(self):
 
@@ -496,13 +524,7 @@ class SpotifyAPI:
     def main(self):
 
         print("hello")
-
-
-       
+        self.add_to_playlist()
         
 
 print("Start....")
-a = SpotifyAPI()
-a.create_playlist()
-#a.call_refresh()
-#a.main()
