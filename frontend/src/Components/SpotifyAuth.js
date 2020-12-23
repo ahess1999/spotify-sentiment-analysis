@@ -6,7 +6,7 @@ export const authEndpoint = "https://accounts.spotify.com/authorize";
 const clientId = "003aebbf02134fccbf4cd6453f9ac581";
 
 // Redirects back to the homepage
-const redirectUri = "http://localhost:3000/";
+const redirectUri = "http://localhost:3000/dashboard";
 
 // What our app has access to
 const scopes = [

@@ -3,11 +3,12 @@ import { getTokenFromResponse } from "./SpotifyAuth";
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import axios from 'axios'
+import axios from 'axios';
 import "./Login.css";
 import Login from "./Login";
 import { connect } from "react-redux"
 import { updateToken, } from "../redux/Token/token.actions";
+import Dashboard from './Dashboard';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -67,10 +68,13 @@ function Homepage(props) {
         <div className="app">
         {
             token ? (
+                // <div>
+                //     <h1>WAWAWEEA -- GREAT SUCCESS!!!</h1>
+                //     <h2>{token}</h2>
+                //     <button onClick={() => create_playlist(token)}>Test</button>
+                // </div>
                 <div>
-                    <h1>WAWAWEEA -- GREAT SUCCESS!!!</h1>
-                    <h2>{token}</h2>
-                    <button onClick={() => create_playlist(token)}>Test</button>
+                  <Dashboard token = {token}/>
                 </div>
             ):
             (<div>
