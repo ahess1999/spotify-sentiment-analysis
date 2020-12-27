@@ -21,9 +21,6 @@ class Refresh:
 
         response_json = response.json()
         print(response_json)
+        print(response)
 
-        return response_json["access_token"]
-
-
-a = Refresh()
-a.refresh()
+        return response

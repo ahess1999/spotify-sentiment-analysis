@@ -13,7 +13,7 @@ import { updateToken, } from "../redux/Token/token.actions";
 function Dashboard(props) {
 
   // Populate this with user playlists
-  var playlists = ['Sick nasty playlist','Dope tracks','Coding Playlist','Yaya Ding Dong on shuffle']
+  var playlists = ['Sick nasty playlist','Dope tracks','Coding Playlist','Jaja Ding Dong on shuffle']
 
   const [ token , setToken ] = useState(null);
 
@@ -27,31 +27,20 @@ function Dashboard(props) {
       if (token) {
         setToken(token);
       }
-
-      const fetchData = async () => {
-        const result = await axios.post('/api/token/', token)
-        .then(res => console.log(res))
+      if(token) {
+        props.updateToken(token)
       }
-        if(token) {
-          fetchData();
-          props.updateToken(token)
-        }
       console.log({token})
 
 
     },[]);
-
-    function create_playlist(token) {
-      axios.post('/api/playlist/create/', token)
-      .then(res => console.log(res))
-    }
 
   return (
     <div className="dashboard">
       <div className="dashboard__body">
         <LeftBar playlists = {playlists}/>
         <Body token = {props.token}/> 
-        <RightBar/>
+        <RightBar token = {props.token}/>
         {/* spotify={spotify} */}
       </div>
       {/* <Footer spotify={spotify} /> */}

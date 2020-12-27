@@ -45,24 +45,13 @@ function Homepage(props) {
       if (token) {
         setToken(token);
       }
-
-      const fetchData = async () => {
-        const result = await axios.post('/api/token/', token)
-        .then(res => console.log(res))
+      if(token) {
+        props.updateToken(token)
       }
-        if(token) {
-          fetchData();
-          props.updateToken(token)
-        }
       console.log({token})
 
 
     },[]);
-
-    function create_playlist(token) {
-      axios.post('/api/playlist/create/', token)
-      .then(res => console.log(res))
-    }
 
     return(
         <div className="app">

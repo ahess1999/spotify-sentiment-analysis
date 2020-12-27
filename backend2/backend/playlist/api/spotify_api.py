@@ -7,9 +7,9 @@ from datetime import date
 class SpotifyAPI:
     def test(self):
         return "tests"
-    def __init__(self):
-        self.user_id = "gp8n7os6rj2i6iv4bscbu9n58"
-        self.spotify_token = "BQCLoFhQs3II6XhaKtbVcwXqZFnUqTMkqzNjkjRQf0y59sxkGs3tzBIVNyi988T8PtJ6fI_9_G0F37EBZZbnjQTKQmspVyOoYQwObpIPaI4zzm4r3d-i1P1rCvtI-l6RCW8iwV6sRiX48v-ka-c5Q9bUFjnaZVGc5XwyJs_DUNWXUfq7g3vqaYKsc5bQazrBa3rNqDMeqbQYCa1B"
+    def __init__(self, token):
+        self.user_id = "jimathonathin"
+        self.spotify_token = token
         #self.playlist = "4hPMl9uWy6q7ZU4cqS6dcm"
         self.tracks = ""
         self.new_playlist_id = ""

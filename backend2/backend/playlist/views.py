@@ -24,9 +24,10 @@ class UserList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def create_playlist(request):
-    a = SpotifyAPI()
+    print(request.data['token'])
+    a = SpotifyAPI(request.data['token'])
     Playlist.objects.create(
         playlistname= 'test',
         songlist = a.add_to_playlist()

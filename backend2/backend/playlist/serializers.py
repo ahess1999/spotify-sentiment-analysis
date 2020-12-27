@@ -2,7 +2,6 @@ from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 from .models import Playlist
-from .api.spotify_api import SpotifyAPI
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
