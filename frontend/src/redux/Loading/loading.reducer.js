@@ -1,19 +1,19 @@
-import UPDATETOKEN from './token.types'
+import ISLOADING from './loading.types'
 
 
 const INITIAL_STATE = {
-    token: '',
+    loading: true,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
 
     switch (action.type) {
 
-        case UPDATETOKEN:
-            return {
+        case ISLOADING:
+            return{
                 ...state, 
-                token: action.payload,
-            };
+                loading: action.payload,
+            }
             
         default: return state;
 

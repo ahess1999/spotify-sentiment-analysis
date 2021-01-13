@@ -1,19 +1,19 @@
-import UPDATETOKEN from './token.types'
+import UPDATEPLAYLISTS from './playlists.types'
 
 
 const INITIAL_STATE = {
-    token: '',
+    playlists: '',
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
 
     switch (action.type) {
 
-        case UPDATETOKEN:
-            return {
+        case UPDATEPLAYLISTS:
+            return{
                 ...state, 
-                token: action.payload,
-            };
+                playlists: action.payload,
+            }
             
         default: return state;
 

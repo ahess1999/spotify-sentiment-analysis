@@ -3,19 +3,76 @@ import requests
 #from secrets import spotify_user_id#, spotify_token
 from datetime import date
 #from refresh import Refresh
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import scale
+from numpy import random, float, array
+
+import django
 
 class SpotifyAPI:
     def test(self):
         return "tests"
     def __init__(self, token):
-        self.user_id = "jimathonathin"
         self.spotify_token = token
         #self.playlist = "4hPMl9uWy6q7ZU4cqS6dcm"
         self.tracks = ""
         self.new_playlist_id = ""
         #self.artist_uri = "" #2h93pZq0e7k5yf4dywlkpM
         self.artist_name = ""
-        self.user_id = ""
+
+    def get_playlist_tracks(self,token,playlist_name):
+        print('inside get playlist tracks')
+        tracks = self.get_playlist_tracks_from_uri(playlist_name)
+        return tracks
+
+    #Create fake income/age clusters for N people in k clusters
+    def createClusteredData(self,N, k):
+        random.seed(10)
+        pointsPerCluster = float(N)/k
+        X = []
+        for i in range (k):
+            incomeCentroid = random.uniform(20000.0, 200000.0)
+            ageCentroid = random.uniform(20.0, 70.0)
+            for j in range(int(pointsPerCluster)):
+                X.append([random.normal(incomeCentroid, 10000.0), random.normal(ageCentroid, 2.0)])
+        X = array(X)
+        return X
+
+    def graph_data(self):
+
+        data = self.createClusteredData(100, 5)
+
+        model = KMeans(n_clusters=5)
+
+        # Note I'm scaling the data to normalize it! Important for good results.
+        model = model.fit(scale(data))
+
+        # We can look at the clusters each data point was assigned to
+        print(model.labels_)
+        print('hellllllooo')
+
+        # And we'll visualize it:
+        plt.figure(figsize=(8, 6))
+        plt.scatter(data[:,0], data[:,1], c=model.labels_.astype(float))
+        #plt.show()
+
+    def get_user_playlists(self):
+
+        query = "https://api.spotify.com/v1/me/playlists"
+
+        response = requests.get(query,
+                                headers={"Content-Type": "application/json",
+                                         "Authorization": "Bearer {}".format(self.spotify_token)})
+
+        response_json = response.json()
+
+        playlist_names = []
+        playlists = response_json['items']
+        for i in playlists:
+            playlist_names.append(i['name']+":"+i['id'])
+        return playlist_names
+        	
 
     def get_user_id(self):
 
@@ -505,12 +562,12 @@ class SpotifyAPI:
 
         print("Refreshing token")
 
-        for i in range(10):
-            print('Working')
+        # for i in range(10):
+        #     print('Working')
 
-        refreshCaller = Refresh()
+        #refreshCaller = Refresh()
 
-        self.spotify_token = refreshCaller.refresh()
+        #self.spotify_token = refreshCaller.refresh()
 
         # json = self.get_track_json('6tGwDY47NZVeQ5X83HDK6u')
 
@@ -525,6 +582,9 @@ class SpotifyAPI:
 
         print("hello")
         self.add_to_playlist()
+
+    def run_sentiment():
+        self.graph_data()
         
 
 print("Start....")

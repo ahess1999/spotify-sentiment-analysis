@@ -34,6 +34,31 @@ def create_playlist(request):
     )
     return Response(status=status.HTTP_201_CREATED)
 
+@api_view(['POST'])
+def run_sentiment(request):
+    a = SpotifyAPI(request.data['token'])
+    print(request.data)
+    p = a.get_user_playlists()
+    print("hoop n hop")
+    print(p)
+    return Response( status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def get_playlists(request):
+    a = SpotifyAPI(request.data['token'])
+    print(request.data)
+    p = a.get_user_playlists()
+    print("nop pop")
+    print(p)
+    return Response(p)
+
+@api_view(['POST', 'GET'])
+def get_playlist_tracks(request):
+    a = SpotifyAPI(request.data['token'])
+    print(request.data)
+    t = a.get_playlist_tracks(request.data['token'],request.data['playlist_id'])
+    print("called get playlist tracks")
+    return Response(t)
 
 class TokenGet(APIView):
     permission_classes = (permissions.AllowAny,)

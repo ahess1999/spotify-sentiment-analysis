@@ -1,18 +1,18 @@
-import UPDATETOKEN from './token.types'
+import UPDATETRACKS from './tracks.types'
 
 
 const INITIAL_STATE = {
-    token: '',
+    tracks: '',
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
 
     switch (action.type) {
 
-        case UPDATETOKEN:
+        case UPDATETRACKS:
             return {
                 ...state, 
-                token: action.payload,
+                tracks: action.payload,
             };
             
         default: return state;
