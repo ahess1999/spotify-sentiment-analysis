@@ -22,8 +22,9 @@ import store from "../redux/store"
 // (3) Pull from redux and display on body
 
 
-function LeftBar({playlists,token,updateTracks,props}) {
+function LeftBar({playlists, props}) {
   
+  console.log("playlists!!!")
  console.log(playlists)
 
  //const props = store.getState()
@@ -43,8 +44,8 @@ function LeftBar({playlists,token,updateTracks,props}) {
         <br />
         <strong className="leftbar__title">PLAYLISTS</strong>
         <hr />
-        {playlists?.map((playlist) => (
-          <SideBarOption updateTracks = {props.updateTracks} option={playlist} token = {token}/>
+        {Object.keys(playlists)?.map((playlist) => (
+          <SideBarOption option={playlist} props = {props}/>
         ))}
       </div>
     );

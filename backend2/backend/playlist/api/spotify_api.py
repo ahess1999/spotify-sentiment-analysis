@@ -15,17 +15,155 @@ class SpotifyAPI:
         return "tests"
     def __init__(self, token):
         self.spotify_token = token
-        #self.playlist = "4hPMl9uWy6q7ZU4cqS6dcm"
         self.tracks = ""
         self.new_playlist_id = ""
-        #self.artist_uri = "" #2h93pZq0e7k5yf4dywlkpM
         self.artist_name = ""
 
+    def get_username_from_playlist_json(self, playlist_json):
+        return playlist_json['owner']['display_name']
+
+    def get_playlist_image(self, playlist_json):
+        return playlist_json['images'][0]['url']
+
+    # Main function used in the UI
+    def get_user_playlists(self):
+
+            query = "https://api.spotify.com/v1/me/playlists"
+
+            response = requests.get(query,
+                                    headers={"Content-Type": "application/json",
+                                            "Authorization": "Bearer {}".format(self.spotify_token)})
+
+            response_json = response.json()
+
+            
+            completed_list = [] # list returned to frontend
+
+            for playlist in response_json['items']:
+ 
+                playlist_info = [] # stores info about playlist: tracks, description, etc..
+                playlist_dict = {} # KEY: name of playlist / VALUE: playlist_info ^
+                
+
+                # Get tracks and relevant information about tracks in playlist
+                track_uris = self.get_tracks_in_playlist_from_uri(playlist['id'])
+                tracks = track_uris.split(",")
+                tracks_in_playlist = []
+
+
+                for track in tracks:
+                    track_info = {}
+                    json = self.get_track_json(track.split(":")[2])
+                    name = self.get_track_name_from_track_json(json)
+                    info = []
+
+
+                    # Add track id
+                    track_id = {}
+                    track_id['id'] = self.get_track_uri_from_track_json(json)
+                    info.append(track_id)
+
+                    # Add artist of track
+                    track_artist = {}
+                    track_artist['artists'] = self.get_track_artist_from_track_json(json)
+                    info.append(track_artist)
+
+                    # Add album of track
+                    track_album = {}
+                    track_album['album'] = self.get_track_album_name_from_track_json(json)
+                    info.append(track_album)
+
+                    # Add release date of track
+                    track_release = {}
+                    track_release['release'] = self.get_track_release_date_from_track_json(json)
+                    info.append(track_release)
+
+                    # Add duration of track
+                    track_duration = {}
+                    track_duration['duration'] = self.get_track_duration_from_track_json(json)
+                    info.append(track_duration)
+
+                    # Add image URL of track
+                    track_image = {}
+                    track_image['image'] = self.get_image_url_from_track_json(json)
+                    info.append(track_image)
+
+                    #
+                    # Add track information list
+                    #
+                    track_info[name] = info
+                    tracks_in_playlist.append(track_info)
+
+
+                # Add tracks to dictionary for the playlist
+                playlist_tracks = {}
+                playlist_tracks['tracks'] = tracks_in_playlist
+                playlist_info.append(playlist_tracks)
+
+                # Add the name of a playlist to dictionary for the playlist
+                name = playlist['name']
+                playlist_name = {}
+                playlist_name['name'] = name
+                playlist_info.append(playlist_name)
+
+                # Add the description of a playlist to dictionary for the playlist
+                description = playlist['description']
+                playlist_description = {}
+                playlist_description['description'] = description
+                playlist_info.append(playlist_description)
+
+                # Add playlist image
+                image = self.get_playlist_image(playlist)
+                playlist_image = {}
+                playlist_image['image'] = image
+                playlist_info.append(playlist_image)
+
+                # Add username
+                username = self.get_username_from_playlist_json(playlist)
+                user = {}
+                user['username'] = username
+                playlist_info.append(user)
+
+                #Add the playlist info to list of playlists
+                playlist_dict[playlist['name']] = playlist_info
+                completed_list.append(playlist_dict)
+
+            return completed_list # return all playlists
+
+
+        	
     def get_playlist_tracks(self,token,playlist_name):
         print('inside get playlist tracks')
-        tracks = self.get_playlist_tracks_from_uri(playlist_name)
-        return tracks
+        playlist = []
+        tracks = self.get_playlist_track_uris_from_uri(playlist_name)
+        for track in tracks:
+            track = track.split(":")[2]
+            json = self.get_track_json(track)
+            info = ""
+            info += track + "..."
+            info += self.get_track_name_from_track_json(json) + "..."
+            info += self.get_track_album_name_from_track_json(json) + "..."
+            info += self.get_track_duration_from_track_json(json) + "..."
+            info += self.get_track_release_date_from_track_json(json) + "..."
+            artists = self.get_track_artist_from_track_json(json)
+            for artist in artists:
+                info += artist + ", "
+            info = info[:-2]
+            playlist.append(info)
+        json = self.get_playlist_json(playlist_name)
+        description = self.get_playlist_description_from_playlist_json(json)
+        playlist.append(description)
+        name = self.get_playlist_title_from_playlist_json(json)
+        playlist.append(name)
+        return playlist
 
+    def get_playlist_description_from_playlist_json(self,playlist_json):
+        print(playlist_json['description'])
+        return playlist_json['description']
+
+    def get_playlist_title_from_playlist_json(self,playlist_json):
+        print(playlist_json['name'])
+        return playlist_json['name']
     #Create fake income/age clusters for N people in k clusters
     def createClusteredData(self,N, k):
         random.seed(10)
@@ -57,22 +195,7 @@ class SpotifyAPI:
         plt.scatter(data[:,0], data[:,1], c=model.labels_.astype(float))
         #plt.show()
 
-    def get_user_playlists(self):
-
-        query = "https://api.spotify.com/v1/me/playlists"
-
-        response = requests.get(query,
-                                headers={"Content-Type": "application/json",
-                                         "Authorization": "Bearer {}".format(self.spotify_token)})
-
-        response_json = response.json()
-
-        playlist_names = []
-        playlists = response_json['items']
-        for i in playlists:
-            playlist_names.append(i['name']+":"+i['id'])
-        return playlist_names
-        	
+   
 
     def get_user_id(self):
 
@@ -300,6 +423,9 @@ class SpotifyAPI:
         print("Returning artist: "+artist_json['name'])
         return artist_json['name']
 
+    def get_image_url_from_track_json(self, track_json):
+        return track_json['album']['images'][0]['url']
+
     def get_track_year_from_track_json(self, track_json):
         print("Returning track release date: "+track_json['album']['release_date'].split('-')[0])
         return track_json['album']['release_date'].split('-')[0]
@@ -315,6 +441,12 @@ class SpotifyAPI:
     def get_track_name_from_track_json(self, track_json):
         print("Returning track's name: "+track_json['name'])
         return track_json['name']
+
+    def get_track_artist_from_track_json(self, track_json):
+        artists = []
+        for i in track_json['artists']:
+            artists.append(i['name'])
+        return artists
 
     def convertMillis(self, millis):
         seconds=(millis/1000)%60

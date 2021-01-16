@@ -1,19 +1,19 @@
-import UPDATETRACKS from './tracks.types'
+import INDEX from './index.types'
 
 
 const INITIAL_STATE = {
-    tracks: [],
+    index: 0,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
 
     switch (action.type) {
 
-        case UPDATETRACKS:
-            return {
+        case INDEX:
+            return{
                 ...state, 
-                tracks: action.payload,
-            };
+                index: action.payload,
+            }
             
         default: return state;
 

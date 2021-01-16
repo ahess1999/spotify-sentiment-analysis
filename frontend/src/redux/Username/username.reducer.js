@@ -1,18 +1,18 @@
-import UPDATETRACKS from './tracks.types'
+import UPDATEUSERNAME from './username.types'
 
 
 const INITIAL_STATE = {
-    tracks: [],
+    username: '',
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
 
     switch (action.type) {
 
-        case UPDATETRACKS:
+        case UPDATEUSERNAME:
             return {
                 ...state, 
-                tracks: action.payload,
+                username: action.payload,
             };
             
         default: return state;
