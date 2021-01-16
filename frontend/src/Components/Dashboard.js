@@ -13,6 +13,7 @@ import { updatePlaylists } from "../redux/Playlists/playlists.actions";
 import { updateTracks } from "../redux/Tracks/tracks.actions";
 import { isIndex } from '../redux/Index/index.actions';
 import { updateUsername } from '../redux/Username/username.actions';
+import { MagicSpinner } from "react-spinners-kit";
 
 
 
@@ -108,9 +109,13 @@ function Dashboard(props) {
     <div className="dashboard">
       {
         loading ? (
-          <div>
-            <h1>Loading..</h1>
-          </div>
+            <div className="spinner">
+                <MagicSpinner 
+                size = {40}
+                color="#686769"
+                />
+            </div>
+
         ):(
           <div className="dashboard__body">
             <LeftBar playlists = {props.playlists} props = {props}/>

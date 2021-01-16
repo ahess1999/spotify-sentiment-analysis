@@ -1,5 +1,8 @@
 {
   "name": "spotify-sentiment-analysis",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "react-spinners-kit": "^1.9.1"
+  }
 }
